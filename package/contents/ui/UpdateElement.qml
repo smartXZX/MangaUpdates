@@ -22,32 +22,66 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.extras 0.1 as PlasmaExtras
 
-Column{
-	height: 100
-	width: 200
-	anchors.fill: parent
+Column {
+	id: updatedManga
+	//anchors.fill: parent
+	width: parent.width
 	
 	
-	PlasmaExtras.Title { 
+	PlasmaExtras.Title {
+		id:title
 		text: "SHINIGAMI TANTEI TO YUUREI GAKUEN"
+		//anchors.fill: parent
+		//anchors.top: parent.top
 		wrapMode: Text.WordWrap
 		anchors.right: parent.right
 		anchors.left: parent.left
 		font.bold: true
 	}
 	
-	PlasmaExtras.Heading { 
+	PlasmaExtras.Heading {
+		id: updateDate
 		text: "Mar 3, 2014"
 		level: 5
+		//anchors.fill: parent
+		horizontalAlignment: Text.AlignRight
+		//anchors.top: title.bottom
 		anchors.right: parent.right
+		anchors.left: parent.left
 		anchors.rightMargin: 15
 	}
 	
-	PlasmaExtras.Paragraph {
+	ListView {
+		id: newChaptersList
+		height: chapter.height
+		model: NewChapters {}
+		snapMode: ListView.NoSnap
+		
+		anchors.fill: parent
+		//anchors.top: title.bottom
+		
+		delegate: chapter
+	}
+
+	
+	
+	Component {
+		id: chapter
+
+		PlasmaExtras.Heading {
+			text: chapter
+			anchors.right: parent.right
+			anchors.left: parent.left
+			level: 4
+		}
+		
+	}
+		
+	/* PlasmaExtras.Paragraph {
 		text: "Shinigami Tantei to Yuurei Gakuen 1 The Ghost of the Old School Building" 
 		//wrapMode: Text.WordWrap
 		anchors.right: parent.right
 		//anchors.left: parent.left
 		font.bold: true
-	}
+	}*/
 }
