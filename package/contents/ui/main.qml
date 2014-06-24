@@ -22,31 +22,14 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Item {
-    property int minimumWidth: 210
-    property int minimumHeight: 210
-
-    PlasmaCore.Svg {
-        //Instantiate a svg, set the svg image path
-        id: mySvg
-        imagePath: plasmoid.file("images", "pairs.svgz")
+	id: root
+	height: 200
+	width: 400
+    //property int minimumWidth: 210
+    //property int minimumHeight: 210
+    anchors.fill: parent
+    
+    UpdateElement {
     }
-
-    Column {
-        spacing: 10
-
-        PlasmaCore.SvgItem {
-            id: mySvgItem
-            width: 180
-            height: 180
-            anchors.horizontalCenter: parent.horizontalCenter
-            svg: mySvg //use the svg instanciated above
-        }
-
-        PlasmaComponents.Label {
-            text: i18n("A column with a SVG and a label")
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-            }
-        }
-    }
+	
 }
