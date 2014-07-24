@@ -22,66 +22,56 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.extras 0.1 as PlasmaExtras
 
-Column {
-	id: updatedManga
-	//anchors.fill: parent
-	width: parent.width
+PlasmaComponents.Button {
+	
+	property alias mangaTitle: title.text
+	property alias mangaDate: date.text
+	property alias mangaChapters: chapters.text
+	
+	width: 200
+	height: title.height + chapters.height + date.height + 4
+	
+	checkable: false
 	
 	
 	PlasmaExtras.Title {
-		id:title
-		text: "SHINIGAMI TANTEI TO YUUREI GAKUEN"
-		//anchors.fill: parent
-		//anchors.top: parent.top
-		wrapMode: Text.WordWrap
-		anchors.right: parent.right
-		anchors.left: parent.left
-		font.bold: true
+		id: title
+		y: 1
+		x: 5
+		width: parent.width - 10 
+		text: "Really long manga title with some random text"
+		elide: Text.ElideRight
 	}
 	
 	PlasmaExtras.Heading {
-		id: updateDate
-		text: "Mar 3, 2014"
+		id: date
+		y: title.height
+		width: parent.width - 10
+		horizontalAlignment: Text.AlignRight 
+		text: "Today"
 		level: 5
-		//anchors.fill: parent
-		horizontalAlignment: Text.AlignRight
-		//anchors.top: title.bottom
-		anchors.right: parent.right
-		anchors.left: parent.left
-		anchors.rightMargin: 15
 	}
 	
-	ListView {
-		id: newChaptersList
-		height: chapter.height
-		model: NewChapters {}
-		snapMode: ListView.NoSnap
+	PlasmaExtras.Heading {
+		id: chapters
 		
-		anchors.fill: parent
-		//anchors.top: title.bottom
-		
-		delegate: chapter
+		y: title.height + date.height
+		x: 8
+		width: parent.width - 10
+		text: "some chapter\nsome chapter"
+		horizontalAlignment: Text.AlignLeft
+		elide: Text.ElideRight 
+		level: 4
 	}
-
+	
+	Rectangle{
+		id: hot
+		color: "red"
+		width: 20
+		height: parent.height
+		radius: 10
+		opacity: 0.1
+	}
 	
 	
-	Component {
-		id: chapter
-
-		PlasmaExtras.Heading {
-			text: chapter
-			anchors.right: parent.right
-			anchors.left: parent.left
-			level: 4
-		}
-		
-	}
-		
-	/* PlasmaExtras.Paragraph {
-		text: "Shinigami Tantei to Yuurei Gakuen 1 The Ghost of the Old School Building" 
-		//wrapMode: Text.WordWrap
-		anchors.right: parent.right
-		//anchors.left: parent.left
-		font.bold: true
-	}*/
 }

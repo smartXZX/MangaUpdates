@@ -20,16 +20,68 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.plasma.extras 0.1 as PlasmaExtras
 
 Item {
 	id: root
 	height: 200
-	width: 400
-    //property int minimumWidth: 210
+	width: 600
+    property int minimumWidth: 600
     //property int minimumHeight: 210
     anchors.fill: parent
     
-    UpdateElement {
-    }
+	PlasmaCore.DataSource {
+		id: mangaSources
+		engine: "mangaengine"
+		
+		connectedSources: sources
+	}
+	
+	PlasmaCore.DataModel {
+			id: mangaModel
+			dataSource: mangaSources
+	}
+	
+	ListView {
+		id: updatesList
+		anchors.fill: parent
+		
+		model: mangaModel
+		
+		delegate: updatedItem
+	}
+	
+	Component {
+		id: updatedItem
+		
+		PlasmaComponents.ListItem {
+			
+		function readValues(mangaChapters) {
+			var tmp = ""
+			for (var prop in mangaChapters) {
+				//tmp.push(mangaChapters[prop])
+				tmp = tmp + mangaChapters[prop]['chapter'] + "\n"
+				//console.log(mangaChapters[prop]['chapter'])
+			}
+			tmp = tmp.slice(0,-1)
+			console.log(tmp[0]['chapter'] + " Loaded")
+			//return allChaps
+			return tmp
+		}
+		
+		UpdateElement {
+			width: parent.width
+			mangaTitle: title
+			mangaDate: date
+			mangaChapters: readValues(chapters)
+			//mangaChapters: mangaModel.tst
+		}
+		
+		/*MouseArea { 
+			anchors.fill: parent
+			onClicked: readValues(chapters)
+		}*/
+		}
+	}
 	
 }
