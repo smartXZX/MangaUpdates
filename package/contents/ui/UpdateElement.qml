@@ -22,11 +22,16 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.extras 0.1 as PlasmaExtras
 
+
+
 PlasmaComponents.Button {
+	id: element
 	
 	property alias mangaTitle: title.text
 	property alias mangaDate: date.text
 	property alias mangaChapters: chapters.text
+	property string mangaDescription: ""
+	property string flag: ""
 	
 	width: 200
 	height: title.height + chapters.height + date.height + 4
@@ -46,7 +51,7 @@ PlasmaComponents.Button {
 	PlasmaExtras.Heading {
 		id: date
 		y: title.height
-		width: parent.width - 10
+		width: parent.width - 25
 		horizontalAlignment: Text.AlignRight 
 		text: "Today"
 		level: 5
@@ -64,13 +69,107 @@ PlasmaComponents.Button {
 		level: 4
 	}
 	
-	Rectangle{
-		id: hot
-		color: "red"
-		width: 20
-		height: parent.height
-		radius: 10
-		opacity: 0.1
+	Component {
+		id: hotFlag
+		
+		Rectangle{
+			color: "red"
+			width: 20
+			height: element.height
+			radius: 3
+			opacity: 0.2
+			x: element.width - 20
+			
+			Text {
+				text: "HOT"
+				rotation: -90
+				color: "white"
+				anchors.centerIn: parent
+				font.bold: true
+			}
+		}
+	}
+	
+	Component {
+		id: newFlag
+		
+		Rectangle{
+			color: "blue"
+			width: 20
+			height: element.height
+			radius: 3
+			opacity: 0.2
+			x: element.width - 20
+			
+			Text {
+				text: "NEW"
+				rotation: -90
+				color: "white"
+				anchors.centerIn: parent
+				font.bold: true
+			}
+		}
+	}
+	
+	PlasmaCore.ToolTip {
+        id: toolTip
+        target: element
+        mainText: mangaTitle
+        // subText: Get.getDescription(mangaDescription)
+    }
+    
+    Component.onCompleted: {
+		getDescription(mangaDescription)
+	}
+    
+    function getDescription(url) {
+		var req = new XMLHttpRequest();
+		req.open('GET', url, true);
+		req.setRequestHeader("Content-Type", "text/xml");
+		req.send();
+    
+		req.onreadystatechange = function() {
+			if (req.readyState == XMLHttpRequest.DONE) {
+				var tmp = req.responseText.split("<p class=\"summary")[1];
+				var tmp2 = tmp.split("<\/p>")[0];
+				if (tmp2[0] == "\"") {
+					toolTip.subText = tmp2.substring(2);
+				} else {
+					toolTip.subText = tmp2.substring(7);
+				}
+			}
+
+			//console.log(retval);
+		}
+	}
+	
+	Loader {
+		id: flagLoader
+		//anchors.fill: parent
+		
+		state: if (element.flag == "hot") {
+			"HOT";
+		} else if (element.flag == "new") {
+			"NEW";
+		} else "NORMAL";
+		
+		states:[
+			State {
+				name: "HOT"
+				PropertyChanges {
+					target: flagLoader
+					sourceComponent: hotFlag
+				}
+			},
+			
+			State {
+				name: "NEW"
+				PropertyChanges {
+					target: flagLoader
+					sourceComponent: newFlag
+				}
+			}
+		]
 	}
 	
 	

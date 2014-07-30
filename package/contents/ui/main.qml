@@ -25,7 +25,7 @@ import org.kde.plasma.extras 0.1 as PlasmaExtras
 Item {
 	id: root
 	height: 200
-	width: 600
+	width: 800
     property int minimumWidth: 600
     //property int minimumHeight: 210
     anchors.fill: parent
@@ -74,7 +74,8 @@ Item {
 			mangaTitle: title
 			mangaDate: date
 			mangaChapters: readValues(chapters)
-			//mangaChapters: mangaModel.tst
+			flag: hot_new
+			mangaDescription: descr_url
 		}
 		
 		/*MouseArea { 
