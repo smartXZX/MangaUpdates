@@ -30,14 +30,13 @@ PlasmaComponents.Button {
 	property alias mangaTitle: title.text
 	property alias mangaDate: date.text
 	property alias mangaChapters: chapters.text
-	property string mangaDescription: ""
+	property alias mangaDescription: toolTip.subText
 	property string flag: ""
 	
 	width: 200
 	height: title.height + chapters.height + date.height + 4
 	
-	checkable: false
-	
+	checkable: true	
 	
 	PlasmaExtras.Title {
 		id: title
@@ -118,29 +117,17 @@ PlasmaComponents.Button {
         // subText: Get.getDescription(mangaDescription)
     }
     
-    Component.onCompleted: {
+    /*Component.onCompleted: {
 		getDescription(mangaDescription)
+	}*/
+	
+	Loader {
+		id: test
 	}
-    
-    function getDescription(url) {
-		var req = new XMLHttpRequest();
-		req.open('GET', url, true);
-		req.setRequestHeader("Content-Type", "text/xml");
-		req.send();
-    
-		req.onreadystatechange = function() {
-			if (req.readyState == XMLHttpRequest.DONE) {
-				var tmp = req.responseText.split("<p class=\"summary")[1];
-				var tmp2 = tmp.split("<\/p>")[0];
-				if (tmp2[0] == "\"") {
-					toolTip.subText = tmp2.substring(2);
-				} else {
-					toolTip.subText = tmp2.substring(7);
-				}
-			}
-
-			//console.log(retval);
-		}
+	
+	onClicked: {
+		
+		test.source = info
 	}
 	
 	Loader {

@@ -69,13 +69,38 @@ Item {
 			return tmp
 		}
 		
+		function getDescription(url) {
+			var req = new XMLHttpRequest();
+			req.open('GET', url, true);
+			req.setRequestHeader("Content-Type", "text/xml");
+			req.send();
+			
+			req.onreadystatechange = function() {
+				if (req.readyState == XMLHttpRequest.DONE) {
+					var tmp = req.responseText.split("<p class=\"summary")[1];
+					var tmp2 = tmp.split("<\/p>")[0];
+					if (tmp2[0] == "\"") {
+						updateElement.mangaDescription = tmp2.substring(2);
+					} else {
+						updateElement.mangaDescription = tmp2.substring(7);
+					}
+				}
+			//console.log(retval);
+			}
+		}
+		
 		UpdateElement {
+			id: updateElement
 			width: parent.width
 			mangaTitle: title
 			mangaDate: date
 			mangaChapters: readValues(chapters)
 			flag: hot_new
-			mangaDescription: descr_url
+			//mangaDescription: getDescription(descr_url)
+			
+			Component.onCompleted: {
+				getDescription(descr_url)
+			}
 		}
 		
 		/*MouseArea { 
@@ -84,5 +109,7 @@ Item {
 		}*/
 		}
 	}
+	
+	
 	
 }
