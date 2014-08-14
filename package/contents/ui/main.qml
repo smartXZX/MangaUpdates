@@ -22,13 +22,15 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.extras 0.1 as PlasmaExtras
 
-Item {
+PlasmaComponents.PageStack {
 	id: root
-	height: 200
-	width: 800
-    property int minimumWidth: 600
-    //property int minimumHeight: 210
+	//height: 600
+	//width: 800
+    //property int minimumWidth: 600
+    //property int minimumHeight: 300
     anchors.fill: parent
+    
+    initialPage: updatesList
     
 	PlasmaCore.DataSource {
 		id: mangaSources
@@ -42,13 +44,14 @@ Item {
 			dataSource: mangaSources
 	}
 	
-	ListView {
+	PlasmaComponents.Page {
 		id: updatesList
-		anchors.fill: parent
-		
-		model: mangaModel
-		
-		delegate: updatedItem
+		pageStack: root
+		ListView {
+			anchors.fill: parent
+			model: mangaModel
+			delegate: updatedItem
+		}
 	}
 	
 	Component {
@@ -101,15 +104,61 @@ Item {
 			Component.onCompleted: {
 				getDescription(descr_url)
 			}
+			
+			onClicked: {
+				root.push(infoPage)
+			}
 		}
 		
-		/*MouseArea { 
-			anchors.fill: parent
-			onClicked: readValues(chapters)
-		}*/
 		}
 	}
 	
-	
-	
+	PlasmaComponents.Page {
+		id: infoPage
+		pageStack: root
+		height: root.height - infoDesc.height
+		width: root.width
+		
+		
+		Column {
+			anchors.fill: parent
+			Image {
+				id: infoImg
+			
+				//height: parent.height - infoDesc.height
+				
+				anchors.top: parent.top
+				anchors.right: parent.right
+				anchors.left: parent.left
+				smooth: true
+				source: "cover.jpg"
+				fillMode: Image.PreserveAspectFit
+			}
+		
+			PlasmaComponents.Label {
+				id: infoDesc
+			
+				anchors.right: parent.right
+				anchors.left: parent.left
+				anchors.bottom: closeDesc.top
+				anchors.top: infoImg.bottom
+			
+				wrapMode: Text.WordWrap
+				text: '<p class="summary less">From a young age, Minami Harusumi has had recurring dreams of Veronica, a princess whose kingdom is on the verge of destruction. He believes them to be recollections of his past life, and that he is her reincarnation. Because of this, he is ridiculed by his classmates. One day, when the mockery escalates into bullying, he rediscovers magic—something Veronica had studied and used. Reassured his past life is not merely a fantasy, Minami tries to learn more about his past memories and the reason behind them...</p>'
+			}
+			
+			PlasmaComponents.Button {
+				anchors.bottom: parent.bottom
+				height: 20
+				width: parent.width
+				id: closeDesc
+				text: "Close"
+				
+				onClicked: {
+					root.push(updatesList)
+				}
+			}
+		}
+	}
+		
 }

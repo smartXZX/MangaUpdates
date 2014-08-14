@@ -116,19 +116,7 @@ PlasmaComponents.Button {
         mainText: mangaTitle
         // subText: Get.getDescription(mangaDescription)
     }
-    
-    /*Component.onCompleted: {
-		getDescription(mangaDescription)
-	}*/
-	
-	Loader {
-		id: test
-	}
-	
-	onClicked: {
-		
-		test.source = info
-	}
+
 	
 	Loader {
 		id: flagLoader
